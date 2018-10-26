@@ -1,0 +1,14 @@
+# .travis.yml
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+script:
+  - docker build --pull -t fretlink/nix .
+  - docker run -it --rm fretlink/nix nix-channel --list
+  - docker run -it --rm fretlink/nix sh -l -c 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
