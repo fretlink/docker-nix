@@ -23,3 +23,4 @@ RUN cd && wget https://nixos.org/releases/nix/nix-$NIX_VERSION/nix-$NIX_VERSION-
 ENV ENV="/home/nixuser/.nix-profile/etc/profile.d/nix.sh"
 RUN ln -s ${ENV} ${HOME}/.profile
 SHELL ["/usr/bin/env", "bash", "-l", "-c"]
+ENTRYPOINT ["/usr/bin/env", "bash", "-l", "-c"]
