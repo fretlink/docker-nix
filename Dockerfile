@@ -24,6 +24,17 @@ RUN cd && wget https://nixos.org/releases/nix/nix-$NIX_VERSION/nix-$NIX_VERSION-
 
 ENV ENV="/home/nixuser/.nix-profile/etc/profile.d/nix.sh"
 RUN echo ". ${ENV}" >> ${HOME}/.profile
-
+# All subsequent "RUN" will use a login shell
 SHELL ["/usr/bin/env", "bash", "-l", "-c"]
+
+RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable \
+    && nix-channel --update
+
+# Propagate UTF8
+# https://github.com/NixOS/nix/issues/599#issuecomment-153885553
+# The same is hapenning with stack2nix
+RUN nix-env -iA nixpkgs.glibcLocales \
+    && echo "export LOCALE_ARCHIVE=$(nix-env --installed --no-name --out-path --query glibc-locales)/lib/locale/locale-archive" >> ${HOME}/.profile
+
+# Make sure to use "login" shell when running container
 ENTRYPOINT ["/usr/bin/env", "bash", "-l", "-c"]
