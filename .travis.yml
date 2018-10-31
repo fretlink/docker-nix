@@ -8,7 +8,12 @@ addons:
     packages:
       - docker-ce
 
+matrix:
+  include:
+    - env: BASE_OS=alpine
+    - env: BASE_OS=debian
+
 script:
-  - docker build --pull -t fretlink/nix .
+  - docker build --pull -t fretlink/nix ${BASE_OS}/
   - docker run -it --rm fretlink/nix 'nix-channel --list'
   - docker run -it --rm fretlink/nix 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
