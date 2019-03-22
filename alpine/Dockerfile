@@ -27,8 +27,9 @@ RUN echo ". ${ENV}" >> ${HOME}/.profile
 # All subsequent "RUN" will use a login shell
 SHELL ["/usr/bin/env", "bash", "-l", "-c"]
 
-RUN nix-channel --add https://nixos.org/channels/nixpkgs-18.09-darwin nixpkgs \
-  && nix-channel --update
+RUN nix-channel --add https://nixos.org/channels/nixpkgs-19.03-darwin nixpkgs \
+    && nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable \
+    && nix-channel --update
 
 # Propagate UTF8
 # https://github.com/NixOS/nix/issues/599#issuecomment-153885553
