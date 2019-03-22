@@ -4,7 +4,7 @@
 
 This image contains an installation of the [Nix package manager](https://nixos.org/nix/) installed as a single-user `nixuser`.
 
-This is based on the unpublished Dockerfile of https://github.com/romcheck/nix.
+This is based on the unpublished Dockerfile previously available at https://github.com/romcheck/nix.
 
 Use this build to create your own customized images as follows:
 
