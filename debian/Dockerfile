@@ -2,7 +2,7 @@
 FROM debian:stable-slim
 
 ARG NIX_VERSION
-ENV NIX_VERSION ${NIX_VERSION:-2.1.3}
+ENV NIX_VERSION ${NIX_VERSION:-2.2.1}
 ARG LANG
 ENV LANG ${LANG:-"en_US.UTF-8"}
 
@@ -11,7 +11,9 @@ RUN addgroup --gid 30000 --system nixbld \
     && adduser --disabled-password nixuser \
     && mkdir -m 0755 /nix && chown nixuser /nix \
     && apt update && apt install -y wget bzip2 \
-    && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    # sandboxing enabled by default since 2.2
+    && mkdir -p /etc/nix && echo 'sandbox = false' > /etc/nix/nix.conf
 
 USER nixuser
 ENV USER=nixuser
