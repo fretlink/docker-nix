@@ -36,8 +36,17 @@ RUN nix-channel --add https://nixos.org/channels/nixpkgs-19.09-darwin nixpkgs \
 # Propagate UTF8
 # https://github.com/NixOS/nix/issues/599#issuecomment-153885553
 # The same is hapenning with stack2nix
-RUN nix-env -iA nixpkgs.glibcLocales \
-    && echo "export LOCALE_ARCHIVE=$(nix-env --installed --no-name --out-path --query glibc-locales)/lib/locale/locale-archive" >> ${HOME}/.profile
+RUN nix-env -iA nixpkgs.glibcLocales
+
+# < Nix context as a volume
+# We want to be able to define /nix/store as a volume
+# We thus need to "save" the current nix context to be able
+# to restore it at startup time
+RUN cp -R /nix /home/nixuser/initial-nix
+VOLUME ["/nix"]
+# Create bash profile
+COPY --chown=nixuser:nixuser files/.profile ${HOME}/.profile
+# />
 
 # Make sure to use "login" shell when running container
 ENTRYPOINT ["/usr/bin/env", "bash", "-l", "-c"]
