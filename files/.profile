@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Copy initial saved nix context if the /nix is empty
-[ ! "$(ls -A /nix)" ] && cp -R ~/initial-nix/* /nix/
-
 # Source nix environment
 nix_profile="/home/nixuser/.nix-profile/etc/profile.d/nix.sh"
 # shellcheck source=/home/nixuser/.nix-profile/etc/profile.d/nix.sh
