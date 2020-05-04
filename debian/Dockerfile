@@ -2,7 +2,7 @@
 FROM debian:stable-slim
 
 ARG NIX_VERSION
-ENV NIX_VERSION ${NIX_VERSION:-2.3.1}
+ENV NIX_VERSION ${NIX_VERSION:-2.3.4}
 ARG LANG
 ENV LANG ${LANG:-"en_US.UTF-8"}
 
@@ -40,9 +40,6 @@ RUN nix-env -iA nixpkgs.glibcLocales
 
 # < Nix context as a volume
 # We want to be able to define /nix/store as a volume
-# We thus need to "save" the current nix context to be able
-# to restore it at startup time
-RUN cp -R /nix /home/nixuser/initial-nix
 VOLUME ["/nix"]
 # Create bash profile
 COPY --chown=nixuser:nixuser files/.profile ${HOME}/.profile
