@@ -10,4 +10,4 @@ nix_profile="$NIX_SYSTEM_PATH/etc/profile.d/nix.sh"
 LOCALE_ARCHIVE="$NIX_SYSTEM_PATH/lib/locale/locale-archive"
 export LOCALE_ARCHIVE
 
-PATH="$PATH:$NIX_SYSTEM_PATH/bin"
+PATH="$NIX_PROFILE/bin:$PATH:$NIX_SYSTEM_PATH/bin"

@@ -19,6 +19,7 @@ USER nixuser
 ENV USER=nixuser
 ENV HOME="/home/nixuser"
 ENV NIX_SYSTEM_PATH="/nix/var/nix/profiles/system"
+ENV NIX_PROFILE="$HOME/nix-envs"
 
 RUN cd && wget https://nixos.org/releases/nix/nix-$NIX_VERSION/nix-$NIX_VERSION-x86_64-linux.tar.xz \
     && tar xJf nix-*-x86_64-linux.tar.xz \
