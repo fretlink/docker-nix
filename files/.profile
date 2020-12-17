@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ -d "/nix" -a ! -d "/nix/store" ]; then
+  mount /nix
+fi
+
 # Source nix environment
 nix_profile="$NIX_SYSTEM_PATH/etc/profile.d/nix.sh"
 # shellcheck source=$NIX_SYSTEM_PATH/etc/profile.d/nix.sh

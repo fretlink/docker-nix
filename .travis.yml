@@ -15,5 +15,5 @@ matrix:
 
 script:
   - docker build --pull -t fretlink/nix -f ${BASE_OS}/Dockerfile .
-  - docker run -it --rm fretlink/nix 'nix-channel --list'
-  - docker run -it --rm fretlink/nix 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
+  - docker run -it --rm --cap-add SYS_ADMIN fretlink/nix 'nix-channel --list'
+  - docker run -it --rm --cap-add SYS_ADMIN fretlink/nix 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'

@@ -18,7 +18,7 @@ RUN addgroup -g 30000 -S nixbld \
 USER nixuser
 ENV USER=nixuser
 ENV HOME="/home/nixuser"
-ENV NIX_SYSTEM_PATH="/nix/var/nix/profiles/system"
+ENV NIX_SYSTEM_PATH="/nix/var/nix/profiles/system-${NIX_VERSION}"
 ENV NIX_PROFILE="$HOME/nix-envs"
 
 RUN cd && wget https://nixos.org/releases/nix/nix-$NIX_VERSION/nix-$NIX_VERSION-x86_64-linux.tar.xz \
@@ -40,9 +40,16 @@ RUN nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs \
 # The same is hapenning with stack2nix
 RUN nix-env -p "$NIX_SYSTEM_PATH" -iA nixpkgs.glibcLocales
 
+USER root
+RUN mv /nix /nix-stable \
+    && mkdir -m 0755 /nix && chown nixuser /nix \
+    && echo 'overlay /nix overlay lowerdir=/nix-stable,upperdir=/nix-common-overlay/upper,workdir=/nix-common-overlay/workdir,user,exec 0 0' >> /etc/fstab \
+    && mkdir -m 0755 -p /nix-common-overlay/upper /nix-common-overlay/workdir \
+    && chown -R nixuser /nix-common-overlay
+USER nixuser
 # < Nix context as a volume
 # We want to be able to define /nix/store as a volume
-VOLUME ["/nix"]
+VOLUME ["/nix-common-overlay"]
 # />
 
 # Make sure to use "login" shell when running container
