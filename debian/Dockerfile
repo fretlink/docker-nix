@@ -2,7 +2,7 @@
 FROM debian:stable-slim
 
 ARG NIX_VERSION
-ENV NIX_VERSION ${NIX_VERSION:-2.3.4}
+ENV NIX_VERSION ${NIX_VERSION:-2.3.9}
 ARG LANG
 ENV LANG ${LANG:-"en_US.UTF-8"}
 
@@ -32,8 +32,7 @@ SHELL ["/usr/bin/env", "bash", "-l", "-c"]
 # Create bash profile
 COPY --chown=nixuser:nixuser files/.profile ${HOME}/.profile
 
-RUN nix-channel --add https://nixos.org/channels/nixpkgs-19.09-darwin nixpkgs \
-    && nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable \
+RUN nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs \
     && nix-channel --update
 
 # Propagate UTF8
