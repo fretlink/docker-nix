@@ -12,8 +12,7 @@ RUN addgroup -g 30000 -S nixbld \
     && mkdir -m 0755 /nix && chown nixuser /nix \
     && apk add --no-cache bash xz \
     && rm -rf /var/cache/apk/* \
-    # sandboxing enabled by default since 2.2
-    && mkdir -p /etc/nix && echo 'sandbox = false' > /etc/nix/nix.conf
+    && mkdir -p /etc/nix && touch /etc/nix/nix.conf
 
 USER nixuser
 ENV USER=nixuser

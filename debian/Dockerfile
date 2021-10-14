@@ -12,8 +12,7 @@ RUN addgroup --gid 30000 --system nixbld \
     && mkdir -m 0755 /nix && chown nixuser /nix \
     && apt update && apt install -y wget xz-utils \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    # sandboxing enabled by default since 2.2
-    && mkdir -p /etc/nix && echo 'sandbox = false' > /etc/nix/nix.conf
+    && mkdir -p /etc/nix && touch /etc/nix/nix.conf
 
 USER nixuser
 ENV USER=nixuser
