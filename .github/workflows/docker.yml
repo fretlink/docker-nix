@@ -1,0 +1,56 @@
+name: Build and push docker image
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - '*'
+
+env:
+  TEST_TAG: fretlink/link
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        base_os:
+          - debian
+          - alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ${{ matrix.base_os }}/Dockerfile
+          load: true
+          tags: ${{ env.TEST_TAG }}
+      - name: Test
+        run: |
+          docker run -it --rm ${{ env.TEST_TAG }} 'nix-channel --list'
+          docker run -it --rm ${{ env.TEST_TAG }} 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
+      - name: Get the version
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Login to DockerHub
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          file: ${{ matrix.base_os }}/Dockerfile
+          tags: fretlink/nix:${{ steps.get_version.outputs.VERSION }}-${{ matrix.base_os }}
