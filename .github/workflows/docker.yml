@@ -33,8 +33,8 @@ jobs:
           tags: ${{ env.TEST_TAG }}
       - name: Test
         run: |
-          docker run -it --rm ${{ env.TEST_TAG }} 'nix-channel --list'
-          docker run -it --rm ${{ env.TEST_TAG }} 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
+          docker run --rm ${{ env.TEST_TAG }} 'nix-channel --list'
+          docker run --rm ${{ env.TEST_TAG }} 'nix-env -iA nixpkgs.hello && test "$(hello)" = "Hello, world!"'
       - name: Get the version
         if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
         id: get_version
